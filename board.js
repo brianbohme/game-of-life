@@ -1,8 +1,8 @@
 /**
  * Given a width and height, construct a Board.
- * 
- * @param {Int} width 
- * @param {Int} height 
+ *
+ * @param {Int} width
+ * @param {Int} height
  * @param {Array<Int>} cells the array to use for the cells (default: new Uint8Array(width * height))
  */
 function Board(width=32, height=32, cells) {
@@ -21,7 +21,7 @@ function Board(width=32, height=32, cells) {
 
 /**
  * indexFor(coords: [row: int, col: int]) -> int
- * 
+ *
  * Given an array of coordinates [row, col], return the index of that cell in this
  * board's cells array.
  */
@@ -32,17 +32,17 @@ Board.prototype.indexFor = function([row, col]) {
   // two elements, and names them row and col. Any other elements
   // are ignored.
   //
-  // http://2ality.com/2015/01/es6-destructuring.html  
-  
+  // http://2ality.com/2015/01/es6-destructuring.html
+
   // Return undefined if we're out of bounds
   if (row < 0 || row >= this.height || col < 0 || col >= this.width)
-    return  
+    return
   return row * this.width + col
 }
 
 /**
  * get(coords: [row: int, col: int]) -> uint8
- * 
+ *
  * Get the value of the board at coords.
  */
 Board.prototype.get = function (coords) {
@@ -51,51 +51,120 @@ Board.prototype.get = function (coords) {
 
 /**
  * set(coords: [row: int, col: int], value: uint8)
- * 
+ *
  * Set the value of the board at coords to value.
  */
 Board.prototype.set = function(coords, value) {
-  // TODO
+  this.cells[this.indexFor(coords)] = value;
+  return
 }
 
 /**
  * livingNeighbors(coords: [row: int, col: int])
- * 
+ *
  * Return the count of living neighbors around a given coordinate.
  */
 Board.prototype.livingNeighbors = function([row, col]) {
   // TODO: Return the count of living neighbors.
+
+var counter = 0;
+
+if(this.cells[this.indexFor([row + 1, col])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row - 1, col])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row, col + 1])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row, col - 1])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row + 1, col + 1])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row + 1, col - 1])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row - 1, col + 1])] === 1){
+  counter++
+};
+if(this.cells[this.indexFor([row - 1, col - 1])] === 1){
+  counter++
+};
+
+return counter
 }
 
 /**
  * toggle(coords: [row: int, col: int])
- * 
+ *
  * Toggle the cell at coords from alive to dead or vice versa.
  */
 Board.prototype.toggle = function(coords) {
-  // TODO
+  var currentState = this.get(coords);
+  if(currentState === 1){
+    this.set(coords, 0)
+  }else{
+    this.set(coords, 1)
+  }
 }
 
 /**
  * Give the vitals of a cell (its current state, and how many living neighbors it
- * currently has), return whether it will be alive in the next tick. 
- * 
- * @param {Boolean} isAlive 
- * @param {Number} numLivingNeighbors 
+ * currently has), return whether it will be alive in the next tick.
+ *
+ * @param {Boolean} isAlive
+ * @param {Number} numLivingNeighbors
  */
 function conway(isAlive, numLivingNeighbors) {
-  // TODO
+  //only enter if alive
+  if(isAlive && (numLivingNeighbors === 2 || numLivingNeighbors === 3)){
+    return isAlive
+  }else if (isAlive){
+    isAlive = !isAlive;
+    return isAlive
+  //only enter if dead
+  }else if(!isAlive && numLivingNeighbors === 3){
+    isAlive = !isAlive;
+    return isAlive
+  }else{
+    return isAlive
+  }
 }
 
 /**
  * Given a present board, a future board, and a rule set, apply
  * the rules to the present and modify the future.
- * 
- * @param {Board} present 
+ *
+ * @param {Board} present
  * @param {Board!} future (is mutated)
  * @param {(Boolean, Int) -> Boolean} rules (default: conway)
  */
+
+function isAlive(value){
+  if(value === 1){
+    return true
+  }else{
+    return false
+  }
+};
+
 function tick(present, future, rules=conway) {
-  // TODO
+    for(var i = 0; i < this.width; i++){
+      for(var j = 0; j < this.height; j++){
+        var alive = isAlive(this.cells[this.indexFor[i,j]]);
+        var neighbors = livingNeighbors([i,j]);
+        if(rules(alive, neighbors)){
+          element = 1
+        }else{
+          element = 0
+        }
+      }
+    };
   return [future, present]
 }
+
+
+
