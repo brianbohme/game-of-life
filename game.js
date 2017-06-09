@@ -58,8 +58,7 @@ function Life(container, width=12, height=12) {
     // FIXME: This currently always toggles cell (0, 0).
     // How do we get the coordinate of the cell that was clicked on?
     // HINT: https://developer.mozilla.org/en-US/docs/Web/API/Event/target
-    var cell = document.getElementById('0-0'); // ⬅️ Fix me
-    present.toggle(cell.coord)
+    present.toggle(event.target.coord)
     paint()
   }
 
@@ -121,7 +120,7 @@ function Life(container, width=12, height=12) {
     paint();
   }
 
-  var on = false;
+  var interval = null;
 
   function play() {
     // TODO:
@@ -130,31 +129,29 @@ function Life(container, width=12, height=12) {
 
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
-    on = true;
-    setInterval(step, 100);
+
+    interval = setInterval(step, 100);
   }
 
   function stop() {
     // TODO: Stop autoplay.
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
-    on = false;
-    clearInterval(1);
 
-
+    interval && clearInterval(interval);
+    interval = null
   }
 
   function togglePlaying() {
-    if(on === true){
-      return stop()
-    }else{
-      return play()
-    }
+    interval ? stop() : play()
+  }
+
+  function everythingOff(){
+    return false
   }
 
   function clear() {
-    var present = new Board(width, height);
-    var future = new Board(width, height);
+    ;[present, future] = tick(present, future, everythingOff);
     paint();
   }
 
