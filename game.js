@@ -8,7 +8,7 @@ if (mainElement) {
 
   // TODO: Connect other buttons.
   document.getElementById('play_btn')
-    .addEventListener('click', game.play)
+    .addEventListener('click', game.togglePlaying)
 
   document.getElementById('reset_btn')
     .addEventListener('click', game.random)
@@ -82,7 +82,7 @@ function Life(container, width=12, height=12) {
       var idCoord = allTds[i].id.split('-').map(function(element){
         return parseInt(element, 10);
       });
-      var isCellAlive = isAlive(future.get(idCoord));
+      var isCellAlive = isAlive(present.get(idCoord));
       isCellAlive ? allTds[i].classList.add('alive') : allTds[i].classList.remove('alive');
       }
   }
@@ -121,6 +121,8 @@ function Life(container, width=12, height=12) {
     paint();
   }
 
+  var on = false;
+
   function play() {
     // TODO:
     // Start playing by running the `step` function
@@ -128,33 +130,48 @@ function Life(container, width=12, height=12) {
 
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
-
-    var test = setInterval(step, 100);
-    console.log(test);
+    on = true;
+    setInterval(step, 100);
   }
 
   function stop() {
     // TODO: Stop autoplay.
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
+    on = false;
     clearInterval(1);
+
 
   }
 
   function togglePlaying() {
-    // TODO: If we're playing, stop. Otherwise, start playing.
-    console.log('play clicked');
+    if(on === true){
+      return stop()
+    }else{
+      return play()
+    }
   }
 
   function clear() {
-    // TODO: Clear the board
-    console.log('clear clicked');
+    var present = new Board(width, height);
+    var future = new Board(width, height);
+    paint();
   }
 
   function random() {
-    // TODO: Randomize the board
-    console.log('random clicked');
-  }
+    for(var i = 0; i < present.width; i++){
+      for(var j = 0; j < present.height; j++){
+        var num = Math.floor((Math.random() * 10) + 1);
+        if(num < 4){
+          present.set([i,j], 1)
+        }else{
+          present.set([i,j], 0)
+        }
+      }
+    }
+
+    paint()
+  };
 
   return {play, step, stop, togglePlaying, random, clear}
 };
