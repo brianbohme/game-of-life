@@ -7,6 +7,14 @@ if (mainElement) {
     .addEventListener('click', game.step)
 
   // TODO: Connect other buttons.
+  document.getElementById('play_btn')
+    .addEventListener('click', game.play)
+
+  document.getElementById('reset_btn')
+    .addEventListener('click', game.random)
+
+  document.getElementById('clear_btn')
+    .addEventListener('click', game.clear)
 }
 
 function Life(container, width=12, height=12) {
@@ -19,7 +27,7 @@ function Life(container, width=12, height=12) {
 
   // Create a <table> to hold our cells.
   var table = createTable();
-  
+
   // Put the table in our container
   container.appendChild(table);
 
@@ -38,14 +46,14 @@ function Life(container, width=12, height=12) {
         // We'll put the coordinate on the cell
         // Element itself, letting us fetch it
         // in a click listener later.
-        td.coord = [r, c];        
+        td.coord = [r, c];
         tr.appendChild(td);                            //     </td>
       }
       table.appendChild(tr);                           //   </tr>
     }                                                  //  </table>
-    return table    
+    return table
   }
-  
+
   function toggleCellFromEvent(event) {
     // FIXME: This currently always toggles cell (0, 0).
     // How do we get the coordinate of the cell that was clicked on?
@@ -67,6 +75,16 @@ function Life(container, width=12, height=12) {
     // HINT:
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/classList
     //   https://developer.mozilla.org/en-US/docs/Web/API/Element/getElementsByTagName
+
+
+    var allTds = document.getElementsByTagName('td');
+    for(var i = 0; i < allTds.length; i++){
+      var idCoord = allTds[i].id.split('-').map(function(element){
+        return parseInt(element, 10);
+      });
+      var isCellAlive = isAlive(future.get(idCoord));
+      isCellAlive ? allTds[i].classList.add('alive') : allTds[i].classList.remove('alive');
+      }
   }
 
   function step() {
@@ -105,29 +123,37 @@ function Life(container, width=12, height=12) {
 
   function play() {
     // TODO:
-    // Start playing by running the `step` function    
+    // Start playing by running the `step` function
     // automatically repeatedly every fixed time interval
-    
+
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/setInterval
+
+    var test = setInterval(step, 100);
+    console.log(test);
   }
 
   function stop() {
     // TODO: Stop autoplay.
     // HINT:
     // https://developer.mozilla.org/en-US/docs/Web/API/WindowOrWorkerGlobalScope/clearInterval
+    clearInterval(1);
+
   }
 
   function togglePlaying() {
     // TODO: If we're playing, stop. Otherwise, start playing.
+    console.log('play clicked');
   }
 
   function clear() {
     // TODO: Clear the board
+    console.log('clear clicked');
   }
 
   function random() {
     // TODO: Randomize the board
+    console.log('random clicked');
   }
 
   return {play, step, stop, togglePlaying, random, clear}
