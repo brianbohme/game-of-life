@@ -17,7 +17,7 @@ if (mainElement) {
     .addEventListener('click', game.clear)
 }
 
-function Life(container, width=12, height=12) {
+function Life(container, width=33, height=33) {
   // Create boards for the present and future.
   // Game boards are somewhat expensive to create, so we're going
   // to be reusing them. Each time we step the game, `future`
@@ -159,7 +159,7 @@ function Life(container, width=12, height=12) {
     for(var i = 0; i < present.width; i++){
       for(var j = 0; j < present.height; j++){
         var num = Math.floor((Math.random() * 10) + 1);
-        if(num < 4){
+        if(num < 5){
           present.set([i,j], 1)
         }else{
           present.set([i,j], 0)
