@@ -152,15 +152,15 @@ function isAlive(value){
 };
 
 function tick(present, future, rules=conway) {
-    for(var i = 0; i < this.width; i++){
-      for(var j = 0; j < this.height; j++){
-        var alive = isAlive(this.cells[this.indexFor[i,j]]);
-        var neighbors = livingNeighbors([i,j]);
+    for(var i = 0; i < present.width; i++){
+      for(var j = 0; j < present.height; j++){
+        var alive = isAlive(present.cells[present.indexFor([i,j])]);
+        var neighbors = present.livingNeighbors([i,j]);
         if(rules(alive, neighbors)){
-          element = 1
+          future.set([i,j], 1);
         }else{
-          element = 0
-        }
+          future.set([i,j], 0);
+        };
       }
     };
   return [future, present]
